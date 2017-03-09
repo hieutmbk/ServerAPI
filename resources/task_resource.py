@@ -27,3 +27,17 @@ class TaskRes(Resource):
     def get(self,task_id):
         task = Task.objects().with_id(task_id)
         return mlab.item2json(task)
+
+    def delete(self,task_id):
+        taskdel = Task.objects.with_id(task_id)
+        taskdel.delete()
+        return {"code" : 1, "status": "OK"},200
+
+    def put(self, task_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument(name="name", type=str, location="json")
+        parser.add_argument(name="local_id", type=str, location="json")
+        parser.add_argument(name="done",type=bool,location="json")
+        taskput = Task.objects().with_id(task_id)
+        taskput.update()
+        return {"code": 1, "status": "OK"}, 200
