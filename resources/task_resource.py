@@ -38,6 +38,12 @@ class TaskRes(Resource):
         parser.add_argument(name="name", type=str, location="json")
         parser.add_argument(name="local_id", type=str, location="json")
         parser.add_argument(name="done",type=bool,location="json")
-        taskput = Task.objects().with_id(task_id)
-        taskput.update()
-        return {"code": 1, "status": "OK"}, 200
+        body = parser.parse_args()
+        name = body["name"]
+        local_id = body["local_id"]
+        done = body["done"]
+        task = Task.objects().with_id(task_id)
+        task.update(name=name, local_id=local_id, done=done)
+        task_update = Task.objects().with_id(task_id)
+        return mlab.item2json(task_update)
+
